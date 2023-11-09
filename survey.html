@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Survey</title>
+<link rel="stylesheet" href="styles.css">
+<script defer src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
+<script defer src="survey.js"></script>
+</head>
+<body>
+  <h2>Survey</h2>
+  <div id="survey-div">
+    <form id="survey-form">
+      <p>How important is "Family" to you?</p>
+      <input type="range" id="family" name="family" min="0" max="100">
+      <p>How important is "Friends" to you?</p>
+      <input type="range" id="friends" name="friends" min="0" max="100">
+      <!-- Add more questions as needed -->
+      <button type="submit">Submit Survey</button>
+    </form>
+  </div>
+</body>
+</html>

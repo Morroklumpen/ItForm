@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autentiseringssystem</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="login-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" onclick="toggleModal('login-modal')">&times;</span>
+        <h2>Logg Inn</h2>
+        <input type="email" id="login-email" placeholder="Email">
+        <input type="password" id="login-password" placeholder="Passord">
+        <button onclick="loginWithEmail()">Logg Inn med E-post</button>
+        <button onclick="signInWithGoogle()">Logg Inn med Google</button>
+    </div>
+</div>
+
+<div id="register-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" onclick="toggleModal('register-modal')">&times;</span>
+        <h2>Registrer</h2>
+        <input type="email" id="register-email" placeholder="Email">
+        <input type="password" id="register-password" placeholder="Passord">
+        <button onclick="registerWithEmail()">Registrer med E-post</button>
+        <button onclick="signInWithGoogle()">Registrer med Google</button>
+    </div>
+</div>
+
+
+<div class="auth-buttons">
+    <button onclick="toggleModal('login-modal')">Logg Inn</button>
+    <button onclick="toggleModal('register-modal')">Registrer</button>
+</div>
+
+<script type="module" src="auth.js"></script>
+
+</body>
+</html>
