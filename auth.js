@@ -65,36 +65,9 @@ window.loginWithEmail = function() {
 window.signInWithGoogle = function() {
     signInWithPopup(auth, googleProvider)
       .then((result) => {
-        // Dette er for å håndtere registrering eller innlogging
-        if (result.additionalUserInfo.isNewUser) {
-          alert('Registrert med Google!');
-        } else {
-          alert('Logget inn med Google!');
-        }
-        // Omdiriger brukeren
-        window.location.href = 'survey.html';
-      })
-      .catch((error) => {
-        console.error('Feil under Google innlogging/registrering:', error);
-        alert(error.message);
-      });
-};
-
-function showLoginSuccess() {
-  alert('Logget inn suksessfullt. Du vil bli omdirigert etter 3 sekunder.');
-  setTimeout(() => {
-    window.location.href = 'survey.html';
-  }, 3000);
-}
-
-window.signInWithGoogle = function() {
-    // Denne metoden vil fungere for både registrering og innlogging med Google
-    signInWithPopup(auth, googleProvider)
-      .then((result) => {
-        // Google Sign-In var vellykket, brukerens informasjon er i result.user
-        console.log('Google Sign-In suksess:', result.user);
-        // Du kan sjekke om brukeren er ny eller eksisterende
-        if (result.additionalUserInfo.isNewUser) {
+        // Sjekk om egenskapen 'isNewUser' eksisterer
+        const isNewUser = result?.additionalUserInfo?.isNewUser;
+        if (isNewUser) {
           alert('Velkommen! Registreringen var vellykket.');
         } else {
           alert('Velkommen tilbake!');
@@ -107,3 +80,73 @@ window.signInWithGoogle = function() {
         alert('Feil: ' + error.message);
       });
 };
+
+function showLoginSuccess() {
+  alert('Logget inn suksessfullt. Du vil bli omdirigert etter 3 sekunder.');
+  setTimeout(() => {
+    window.location.href = 'survey.html';
+  }, 3000);
+}
+
+window.signInWithGoogle = function() {
+    signInWithPopup(auth, googleProvider)
+      .then((result) => {
+        // Sjekk om additionalUserInfo eksisterer og inneholder isNewUser
+        const isNewUser = result.additionalUserInfo ? result.additionalUserInfo.isNewUser : false;
+
+        if (isNewUser) {
+          alert('Velkommen! Registreringen var vellykket.');
+        } else {
+          alert('Velkommen tilbake!');
+        }
+        // Omdiriger brukeren til survey.html
+        setTimeout(() => {
+          window.location.href = 'survey.html';
+        }, 3000); // 3 sekunders forsinkelse
+      })
+      .catch((error) => {
+        console.error('Feil under Google Sign-In:', error);
+        alert('Feil: ' + error.message);
+      });
+};
+
+
+
+
+
+
+
+
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+const nodemailer = require('nodemailer');
+
+admin.initializeApp();
+
+const mailTransport = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'your-email@gmail.com',
+    pass: 'your-app-password',
+  },
+});
+
+exports.sendWelcomeEmail = functions.auth.user().onCreate((user) => {
+  const email = user.email; 
+  const displayName = user.displayName || 'ny bruker';
+
+  const mailOptions = {
+    from: '"Ditt Firmanavn" <noreply@yourdomain.com>',
+    to: email,
+    subject: `Velkommen til ${appName}!`,
+    text: `Hei ${displayName}! Velkommen til ${appName}. Vi håper du liker vår tjeneste.`
+  };
+
+  return mailTransport.sendMail(mailOptions)
+    .then(() => {
+      return console.log('Velkomst-e-post sendt til:', email);
+    })
+    .catch((error) => {
+      console.error('Det oppstod en feil ved sending av velkomst-e-post:', error);
+    });
+});
